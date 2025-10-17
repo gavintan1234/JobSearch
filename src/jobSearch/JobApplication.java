@@ -12,6 +12,11 @@ public class JobApplication {
 	private String jobTitle;
 	
 	/*
+	 * Job description
+	 */
+	private String jobDesc;
+	
+	/*
 	 * Date the job was posted
 	 */
 	private String datePosted;
@@ -24,9 +29,10 @@ public class JobApplication {
 	/*
 	 * Constructs a JobApplication
 	 */
-	public JobApplication(String companyName, String jobTitle, String datePosted, String payInformation) {
+	public JobApplication(String companyName, String jobTitle, String jobDesc, String datePosted, String payInformation) {
 		this.companyName = companyName;
 		this.jobTitle = jobTitle;
+		this.jobDesc = jobDesc;
 		this.datePosted = datePosted;
 		this.payInformation = payInformation;
 	}

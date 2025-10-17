@@ -1,6 +1,12 @@
 package jobSearch;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.google.gson.Gson;
 
 
 public class JobManager {
@@ -36,11 +42,13 @@ public class JobManager {
 		String companyName = scanner.nextLine();
 		System.out.println("Enter job title:");
 		String jobTitle = scanner.nextLine();
+		System.out.println("Enter job description:");
+		String jobDesc = scanner.nextLine();
 		System.out.println("Enter date posted:");
 		String datePosted = scanner.nextLine();
 		System.out.println("Enter pay information:");
 		String payInformation = scanner.nextLine();
-		return new JobApplication(companyName, jobTitle, datePosted, payInformation);
+		return new JobApplication(companyName, jobTitle, jobDesc, datePosted, payInformation);
 	}
 	
 	/*
@@ -52,6 +60,26 @@ public class JobManager {
 					", Date Posted: " + job.getDatePosted() + ", Pay Information: " + job.getPayInformation());
 		}
 	}
+	
+	/*
+	 * Writes jobs out to json file
+	 * @param filename the file to save the jobs ArrayList to
+	 */
+	public void SaveJobs(String filename) {
+		Gson gson = new Gson();
+		
+		// Append ".json" to filename
+		if (!filename.endsWith(".json")) {
+			filename += ".json";
+		}
+		
+		// Write to filename
+		try (Writer writer = new FileWriter(filename)) {
+			gson.toJson(this.jobs, writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		JobManager manager = new JobManager();
@@ -60,6 +88,7 @@ public class JobManager {
 			System.out.println("What would you like to do?" + '\n' +
 					"1: Input Job" + "\n" +
 					"2: Display Jobs" + '\n' +
+					"3: Save Jobs" + '\n' +
 					"quit: Exit program");
 			response = manager.scanner.nextLine();
 			switch (response) {
@@ -68,6 +97,11 @@ public class JobManager {
 				break;
 			case "2":
 				manager.DisplayJobs();
+				break;
+			case "3":
+				System.out.println("Specify filename:");
+				String filename = manager.scanner.nextLine();
+				manager.SaveJobs(filename);
 				break;
 			case "quit":
 				System.out.println("Exiting program");
