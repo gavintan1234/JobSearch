@@ -1,12 +1,15 @@
 package jobSearch;
-import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 public class JobManager {
@@ -73,9 +76,30 @@ public class JobManager {
 			filename += ".json";
 		}
 		
-		// Write to filename
+		// Write to file
 		try (Writer writer = new FileWriter(filename)) {
 			gson.toJson(this.jobs, writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Loads jobs from json file
+	 * @param filename the file to load jobs from
+	 */
+	public void LoadJobs(String filename) {
+		Gson gson = new Gson();
+		
+		// Append ".json" to filename
+		if (!filename.endsWith(".json")) {
+			filename += ".json";
+		}
+		
+		// Read from file
+		try (Reader reader = new FileReader(filename)) {
+			Type listType = new TypeToken<ArrayList<JobApplication>>(){}.getType();
+			this.jobs = gson.fromJson(reader, listType);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -84,11 +108,13 @@ public class JobManager {
 	public static void main(String[] args) {
 		JobManager manager = new JobManager();
 		String response = "";
+		String filename;
 		while (!response.equals("quit")) {
 			System.out.println("What would you like to do?" + '\n' +
 					"1: Input Job" + "\n" +
 					"2: Display Jobs" + '\n' +
 					"3: Save Jobs" + '\n' +
+					"4: Load Jobs" + '\n' +
 					"quit: Exit program");
 			response = manager.scanner.nextLine();
 			switch (response) {
@@ -100,8 +126,13 @@ public class JobManager {
 				break;
 			case "3":
 				System.out.println("Specify filename:");
-				String filename = manager.scanner.nextLine();
+				filename = manager.scanner.nextLine();
 				manager.SaveJobs(filename);
+				break;
+			case "4":
+				System.out.println("Specify filename:");
+				filename = manager.scanner.nextLine();
+				manager.LoadJobs(filename);
 				break;
 			case "quit":
 				System.out.println("Exiting program");
