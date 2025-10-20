@@ -17,7 +17,7 @@ public class JobManager {
 	/*
 	 * ArrayList containing the list of JobApplications
 	 */
-	private ArrayList<JobApplication> jobs;
+	private ArrayList<Job> jobs;
 	
 	/*
 	 * Scanner object for reading user input
@@ -32,7 +32,7 @@ public class JobManager {
 	/*
 	 * Add a JobApplication to jobs
 	 */
-	public void addJob(JobApplication job) {
+	public void addJob(Job job) {
 		this.jobs.add(job);
 	}
 	
@@ -40,7 +40,7 @@ public class JobManager {
 	 * Prompts user to enter job application details and creates a JobApplication object
 	 * @return new JobApplication object
 	 */
-	public JobApplication inputJob() {
+	public Job inputJob() {
 		System.out.println("Enter name of company:");
 		String companyName = scanner.nextLine();
 		System.out.println("Enter job title:");
@@ -51,14 +51,14 @@ public class JobManager {
 		String datePosted = scanner.nextLine();
 		System.out.println("Enter pay information:");
 		String payInformation = scanner.nextLine();
-		return new JobApplication(companyName, jobTitle, jobDesc, datePosted, payInformation);
+		return new Job(companyName, jobTitle, jobDesc, datePosted, payInformation);
 	}
 	
 	/*
 	 * Prints all the stored jobs to terminal
 	 */
 	public void DisplayJobs() {
-		for(JobApplication job: this.jobs) {
+		for(Job job: this.jobs) {
 			System.out.println("Company: " + job.getCompanyName() + ", Job Title: " + job.getJobTitle() + 
 					", Date Posted: " + job.getDatePosted() + ", Pay Information: " + job.getPayInformation());
 		}
@@ -98,7 +98,7 @@ public class JobManager {
 		
 		// Read from file
 		try (Reader reader = new FileReader(filename)) {
-			Type listType = new TypeToken<ArrayList<JobApplication>>(){}.getType();
+			Type listType = new TypeToken<ArrayList<Job>>(){}.getType();
 			this.jobs = gson.fromJson(reader, listType);
 		} catch (IOException e) {
 			e.printStackTrace();
